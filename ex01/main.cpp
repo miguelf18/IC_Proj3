@@ -15,7 +15,8 @@ int main(int argc, char **argv)
     cout << "Given text file path: " << file_path << endl;
     FCM fcm(k, alpha);
     fcm.build(file_path);
-    fcm.print();
+    //fcm.print_context_model();
+    //fcm.print_probability_distribution();
     fcm.close();
     return 0;
 }
