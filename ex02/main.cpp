@@ -22,28 +22,30 @@ int main(int argc, char **argv)
     FCM f(k, alpha);
     // f.read_model_context_from_file(ref_file); // função não criada
     f.build(ref_file);
+    f.close();
 
     ifstream ifs(text_file);
     if(!ifs.good()) return -2;
 
     char character;
+    int count = 0;
     while(ifs.get(character))
     {
         if(isalpha(character) == 0) continue;
         character = tolower(character);
         // string context(1, character);
-        cout << "character: " << character << endl;
+        // cout << "character: " << character << endl;
 
-        float prob = f.get_probability(character);
-        cout << "prob " << prob << endl;
+        double prob = f.get_probability(character);
+        // cout << "prob " << prob << endl;
         if(prob == 0) continue;
         // numBits -= floor(log2(prob)); // numBits como int
-        numBits -= prob * log2(prob);
+        numBits -= log2(prob);
+        count++;
     }
-
     ifs.close();
 
-    cout << numBits;
+    cout << numBits / count << endl;
 
     return 0;
 }

@@ -50,6 +50,7 @@ void FCM::probability()
             (*probability_distribution)[key.first][value.first] = probability;
         }
     }
+    print_probability_distribution();
     entropy();
 }
 
@@ -67,9 +68,12 @@ double FCM::get_probability(char character)
         for(auto value : key.second.map)
         {
             if(value.first == character)
-                return ((double) value.second + alpha) / (key.second.count + alphabet_size * alpha);
+            {
+                return (*probability_distribution)[key.first][value.first];
+            }
         }
     }
+    //print_probability_distribution();
     return 0;
 }
 
