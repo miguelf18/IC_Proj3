@@ -29,7 +29,8 @@ void FCM::entropy()
         }
     }
     total_entropy /= character_count;
-    cout << "Total entropy: " << total_entropy << endl;
+    // cout << "Total entropy: " << total_entropy << endl;
+    cout << "bits: " << total_entropy << endl;
 }
 
 // computes probability distribution from context model

@@ -33,7 +33,6 @@ int main(int argc, char **argv)
     {
         if(isalpha(character) == 0) continue;
         character = tolower(character);
-        // string context(1, character);
         // cout << "character: " << character << endl;
 
         double prob = f.get_probability(character);
