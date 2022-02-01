@@ -1,50 +1,22 @@
-#include "fcm.hpp"
-#include <iostream>
-#include <fstream>
-#include <math.h> 
-
-using namespace std;
+#include "lang.hpp"
 
 int main(int argc, char **argv)
 {
     if(argc != 5)
     {
-        cout << "Usage: ./mainRun <reference file> <text file> <k parameter> <smoothing parameter>" << endl;
-        return -1;
+        cerr << "Invalid parameters. Use: mainRun <k parameter> <smoothing parameter> <source file> <target file>" << endl;
+        exit(1);
     }
-
-    string ref_file = argv[1];
-    string text_file = argv[2];
-    int k = atoi(argv[3]);
-    float alpha = atof(argv[4]);
-    double numBits = 0;
-
-    FCM f(k, alpha);
-    // f.read_model_context_from_file(ref_file); // função não criada
-    f.build(ref_file);
-    f.close();
-
-    ifstream ifs(text_file);
-    if(!ifs.good()) return -2;
-
-    char character;
-    int count = 0;
-    while(ifs.get(character))
-    {
-        if(isalpha(character) == 0) continue;
-        character = tolower(character);
-        // cout << "character: " << character << endl;
-
-        double prob = f.get_probability(character);
-        // cout << "prob " << prob << endl;
-        if(prob == 0) continue;
-        // numBits -= floor(log2(prob)); // numBits como int
-        numBits -= log2(prob);
-        count++;
-    }
-    ifs.close();
-
-    cout << numBits / count << endl;
-
+    int k = atoi(argv[1]);
+    float alpha = stof(argv[2]);
+    string source_file = argv[3];
+    string target_file = argv[4];
+    cout << "Given k parameter: " << k << endl;
+    cout << "Given smoothing parameter: " << alpha << endl;
+    cout << "Given text file for model: " << source_file << endl;
+    cout << "Given text file to compare: " << target_file << endl;
+    LANG lang(k, alpha);
+    lang.build(source_file);
+    lang.compare(target_file);
     return 0;
 }

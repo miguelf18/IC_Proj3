@@ -38,18 +38,17 @@ class FCM
         FCM(int k, float alpha);
         // returns the current probability distribution for context model
         unordered_map<string, unordered_map<char, double>> get_context_probability();
+        // returns a probability associated with the given context character based on model information
+        double get_character_probability(string context, char character);
         // computes entropy distribution from probability table
         void entropy();
         // computes probability distribution from context model
         void probability();
-        double get_probability(char character);
         // build a model from a given text file
         // returns false if there are errors, returns true otherwise
         bool build(string file_path);
         // prints current built context model
         void print_context_model();
-        // writes current built context model to a given text file
-        void write_context_model_to_file(string filename);
         // prints current built model probability distribution
         void print_probability_distribution();
         // open/closes the file

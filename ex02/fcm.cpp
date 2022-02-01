@@ -8,13 +8,31 @@ FCM::FCM(int k, float alpha)
     context_model = new unordered_map<string, Symbols>();
     probability_distribution = new unordered_map<string, unordered_map<char, double>>();
     character_count = 0;
-    alphabet_size = 26;
+    // alphabet has 26 letters + space
+    alphabet_size = 27;
 }
 
 // returns the current probability distribution for context model
 unordered_map<string, unordered_map<char, double>> FCM::get_context_probability()
 {
     return *probability_distribution;
+}
+
+// returns a probability associated with the given context character based on model information
+double FCM::get_character_probability(string context, char character)
+{
+    if(context_model->find(context) != context_model->end())
+    {
+        unordered_map<char, int> *context_map = &(*context_model)[context].map;
+        // character found -> return probability from model
+        // else character was not found in given context -> compute probability with alpha
+        cout << "Returning (" << context << ": " << character << "): " << (*probability_distribution)[context][character] << endl;
+        if(context_map->find(character) != context_map->end())
+            return (*probability_distribution)[context][character];
+        return (((double) alpha) / ((*context_model)[context].count + alphabet_size * alpha));
+    }
+    // given context was not found -> compute probability based on alphabet only
+    return (1.0 / alphabet_size);
 }
 
 // computes entropy distribution from probability table
@@ -29,8 +47,7 @@ void FCM::entropy()
         }
     }
     total_entropy /= character_count;
-    // cout << "Total entropy: " << total_entropy << endl;
-    cout << "bits: " << total_entropy << endl;
+    cout << "Bits / Symbol (Model): " << total_entropy << endl;
 }
 
 // computes probability distribution from context model
@@ -55,29 +72,6 @@ void FCM::probability()
     entropy();
 }
 
-double FCM::get_probability(char character)
-{
-    if(character_count == 0)
-    {
-        cerr << "Context model is empty." << endl;
-        return 0;
-    }
-    // loop all keys
-    for(auto key : *context_model)
-    {
-        // loop all maps in every Symbols struct
-        for(auto value : key.second.map)
-        {
-            if(value.first == character)
-            {
-                return (*probability_distribution)[key.first][value.first];
-            }
-        }
-    }
-    //print_probability_distribution();
-    return 0;
-}
-
 // build model
 bool FCM::build(string file_path)
 {
@@ -89,26 +83,27 @@ bool FCM::build(string file_path)
     // start reading file
     while(input_file >> noskipws >> character)
     {
-        // only consider letters
-        if(!isalpha(character))
-            continue; 
-        character = tolower(character);
-        if(character_count < k)
+        // only consider letters and space
+        if(isalpha(character) || character == ' ')
         {
-            // initial context
-            buffer += character;
+            character = tolower(character);
+            if(character_count < k)
+            {
+                // initial context
+                buffer += character;
+            }
+            else
+            {
+                // add symbol to context
+                (*context_model)[buffer].map[character]++;
+                (*context_model)[buffer].count++;
+                buffer = buffer.substr(1, k);
+                buffer += character;
+            }
+            character_count++;
         }
-        else
-        {
-            // add symbol to context
-            (*context_model)[buffer].map[character]++;
-            (*context_model)[buffer].count++;
-            buffer = buffer.substr(1, k);
-            buffer += character;
-        }
-        character_count++;
     }
-    cout << "Total characters read: " << character_count << endl;
+    cout << "Total characters read from model: " << character_count << endl;
     probability();
     return true;
 }
@@ -125,22 +120,6 @@ void FCM::print_context_model()
         }
         cout << "}" << endl;
     }
-}
-
-// writes current built context model to a given text file
-void FCM::write_context_model_to_file(string filename)
-{
-    ofstream ofs(filename);
-    for(auto key : *context_model)
-    {
-        ofs << key.first << " (" << key.second.count << " items)" << ": { ";
-        for(auto value : key.second.map)
-        {
-            ofs << value.first << " : " << value.second << "; ";
-        }
-        ofs << "}" << endl;
-    }
-    ofs.close();
 }
 
 // prints current built model probability distribution
