@@ -51,7 +51,7 @@ bool LANG::compare(string file_path)
         }
     }
     bits /= character_count;
-    cout << "Total characters read from model: " << character_count << endl;
+    cout << "Total characters read from target: " << character_count << endl;
     cout << "Bits / Symbol (Target): " << bits << endl;
     close();
     return true;

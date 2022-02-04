@@ -157,5 +157,7 @@ int main(int argc, char **argv)
     else if (min_bits_symbol == sk.bits_symbol) cout << "slovak";
     else if (min_bits_symbol == sl.bits_symbol) cout << "slovenian";
 
+    cout << endl;
+
     return 0;
 }

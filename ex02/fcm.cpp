@@ -26,7 +26,6 @@ double FCM::get_character_probability(string context, char character)
         unordered_map<char, int> *context_map = &(*context_model)[context].map;
         // character found -> return probability from model
         // else character was not found in given context -> compute probability with alpha
-        cout << "Returning (" << context << ": " << character << "): " << (*probability_distribution)[context][character] << endl;
         if(context_map->find(character) != context_map->end())
             return (*probability_distribution)[context][character];
         return (((double) alpha) / ((*context_model)[context].count + alphabet_size * alpha));
@@ -68,7 +67,6 @@ void FCM::probability()
             (*probability_distribution)[key.first][value.first] = probability;
         }
     }
-    print_probability_distribution();
     entropy();
 }
 
