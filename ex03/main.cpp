@@ -40,7 +40,6 @@ int main(int argc, char **argv)
     LANG pl(k, alpha);
     LANG ro(k, alpha);
     LANG da(k, alpha);
-    LANG el(k, alpha);
     LANG fi(k, alpha);
     LANG hu(k, alpha);
     LANG sv(k, alpha);
@@ -75,8 +74,6 @@ int main(int argc, char **argv)
     ro.build("../files/reference/ref.ro");
     cout << "da" << endl;
     da.build("../files/reference/ref.da");
-    cout << "el" << endl;
-    el.build("../files/reference/ref.el");
     cout << "fi" << endl;
     fi.build("../files/reference/ref.fi");
     cout << "hu" << endl;
@@ -117,8 +114,6 @@ int main(int argc, char **argv)
     ro.compare(text_file);
     cout << "da" << endl;
     da.compare(text_file);
-    cout << "el" << endl;
-    el.compare(text_file);
     cout << "fi" << endl;
     fi.compare(text_file);
     cout << "hu" << endl;
@@ -136,9 +131,9 @@ int main(int argc, char **argv)
                                     bg.bits_symbol, cs.bits_symbol, de.bits_symbol,
                                     es.bits_symbol, et.bits_symbol, it.bits_symbol,
                                     nl.bits_symbol, pl.bits_symbol, ro.bits_symbol,
-                                    da.bits_symbol, el.bits_symbol, fi.bits_symbol,
-                                    hu.bits_symbol, sv.bits_symbol, lv.bits_symbol,
-                                    sk.bits_symbol, sl.bits_symbol);
+                                    da.bits_symbol, fi.bits_symbol, hu.bits_symbol,
+                                    sv.bits_symbol, lv.bits_symbol, sk.bits_symbol,
+                                    sl.bits_symbol);
 
     cout << "\nThe text is written in ";
 
@@ -155,7 +150,6 @@ int main(int argc, char **argv)
     else if (min_bits_symbol == pl.bits_symbol) cout << "polish";
     else if (min_bits_symbol == ro.bits_symbol) cout << "romanian";
     else if (min_bits_symbol == da.bits_symbol) cout << "danish";
-    else if (min_bits_symbol == el.bits_symbol) cout << "greek";
     else if (min_bits_symbol == fi.bits_symbol) cout << "finnish";
     else if (min_bits_symbol == hu.bits_symbol) cout << "hungarian";
     else if (min_bits_symbol == sv.bits_symbol) cout << "swedish";
